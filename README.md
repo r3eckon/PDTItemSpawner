@@ -2,7 +2,7 @@
 
 PDT Item Spawner is a lightweight and powerful GUI based prefab spawner.
 
-[](https://i.imgur.com/zdde9ob.png)
+![](https://i.imgur.com/zdde9ob.png)
 
 Every script necessary to use this asset to randomly place items of all kinds
 and pick them up is included in the package, along side a demo scene created 
