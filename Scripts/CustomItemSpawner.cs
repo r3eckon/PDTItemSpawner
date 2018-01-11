@@ -15,8 +15,10 @@ public class CustomItemSpawner : MonoBehaviour {
 
     public CustomItemSpawnType spawnType;
 
-    bool triggered = false;
-    bool spawned = false;
+    [HideInInspector]
+    public bool triggered = false;
+    [HideInInspector]
+    public bool spawned = false;
 
     public static System.Random rand;
     float n;
@@ -149,6 +151,8 @@ public class CustomItemSpawner : MonoBehaviour {
                 obj.transform.rotation = gameObject.transform.rotation;
                 obj.transform.parent = gameObject.transform;
 
+                
+
                 if (generated.unique)
                 {
                     uniqueItemsGenerated.Add(generated.type);
@@ -162,7 +166,7 @@ public class CustomItemSpawner : MonoBehaviour {
             {
                 spawned = true;
                
-                GameObject.Destroy(gameObject);
+                //GameObject.Destroy(gameObject);
                 
                 return;
             }
@@ -173,13 +177,18 @@ public class CustomItemSpawner : MonoBehaviour {
         {
             if (spawnedItemSettings.pickupable)
             {
-                gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, gatherer.transform.position, 0.04f);
-                if (Vector3.Distance(gameObject.transform.position, gatherer.transform.position) < 0.4f)
+
+                if (transform.childCount == 0)
+                    return;
+
+                gameObject.transform.GetChild(0).transform.position = Vector3.Lerp(gameObject.transform.GetChild(0).transform.position, gatherer.transform.position, 0.04f);
+                
+                if (Vector3.Distance(gameObject.transform.GetChild(0).transform.position, gatherer.transform.position) < 0.4f)
                 {
                     ItemPickedUp(gatherer.GetComponent<CustomItemGatherer>());
                     triggered = false;
 
-                    GameObject.Destroy(gameObject);
+                    GameObject.Destroy(gameObject.transform.GetChild(0).gameObject);
 
                 }
             }
