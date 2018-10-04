@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CustomItemSpawner : MonoBehaviour {
 
@@ -95,17 +96,17 @@ public class CustomItemSpawner : MonoBehaviour {
     //Below methods are important for the generation behavior to be consistent
     //Do not edit those unless you know what you are doing
     void Start () {
-
+        
         rand = new System.Random((int)(DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond));
 
         items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(CustomItemManager.getItemListPath()));
 
         if(orderedItems==null)
             orderedItems = CustomItemManager.reorderListByChance(items);
-
+        
 	}
-	
-	void Update () {
+
+    void Update () {
 
         if (!spawned)
         {
@@ -145,6 +146,20 @@ public class CustomItemSpawner : MonoBehaviour {
 
                 spawned = true;
 
+                
+                if (generated.prefab == null)
+                {
+                    try
+                    {
+                        generated.prefab = GameObject.Find(generated.prefabName);
+                    }
+                    catch
+                    {
+                        Debug.Log("Could not reload item prefab!");
+                    }
+                    
+                }
+                
                 obj = GameObject.Instantiate(generated.prefab);
                 obj.transform.localScale = generated.prefab.transform.lossyScale;
                 obj.transform.position = gameObject.transform.position;
