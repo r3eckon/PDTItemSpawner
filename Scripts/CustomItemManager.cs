@@ -5,8 +5,13 @@ using UnityEngine;
 
 public class CustomItemManager {
 
-    private static string ITEMLISTPATH = Application.dataPath + "/Resources/PDTFiles/Saved Data/CustomItemList.txt";
-    public static string getItemListPath() { return ITEMLISTPATH; }
+    //Item list path use in game. Must be appended with prefix in editor.
+    private static string DefaultListPath = "PDTFiles/Saved Data/CustomItemList";
+    public static string getDefaultListPath() { return DefaultListPath; }
+
+    //Resources folder editor prefix
+    private static string ResourcesFolderPrefix = Application.dataPath + "/PDT Item Spawner/Resources/";
+    public static string getResourcesFolderPrefix() { return ResourcesFolderPrefix;  }
 
     public static CustomItem[] reorderedList;
 
@@ -17,12 +22,6 @@ public class CustomItemManager {
 
     public static void saveItemList(string path, CustomItem[] list)
     {
-
-        if (!Directory.Exists(ITEMLISTPATH))
-        {
-            Directory.CreateDirectory("/Resources/PDTFiles/Saved Data");
-        }
-
         StreamWriter w = new StreamWriter(path);
 
         w.WriteLine("- Custom Item List - ");
@@ -33,7 +32,7 @@ public class CustomItemManager {
             w.WriteLine("-");
             w.WriteLine("Type =" + list[i].type);
             w.WriteLine("Prefab =" + ((list[i].prefab != null) ? list[i].prefab.name : "None" ));
-            w.WriteLine("Chance =" + list[i].generationChance.ToString());
+            w.WriteLine("Chance =" + list[i].generationChance.ToString(System.Globalization.CultureInfo.InvariantCulture));
             w.WriteLine("Unique =" + ( (list[i].unique) ? "TRUE" : "FALSE" ) );
             w.WriteLine("Pickupable =" + (list[i].pickupable ? "TRUE" : "FALSE"));
             w.WriteLine("SpawnType =" + (short)list[i].spawntype);
@@ -75,7 +74,7 @@ public class CustomItemManager {
                 currentItem.prefabName = currentLine.Replace("Prefab =", "");
 
                 currentLine = sr.ReadLine();//Read generation chance
-                currentItem.generationChance = float.Parse(currentLine.Replace("Chance =", ""));
+                currentItem.generationChance = float.Parse(currentLine.Replace("Chance =", ""), System.Globalization.CultureInfo.InvariantCulture);
 
                 currentLine = sr.ReadLine();//Read uniqueness line
                 currentLine = currentLine.Replace("Unique =", "");
@@ -99,7 +98,8 @@ public class CustomItemManager {
         }
         else
         {
-            TextAsset ta = (TextAsset)Resources.Load("PDTFiles/Saved Data/CustomItemList",typeof(TextAsset));
+            TextAsset ta = (TextAsset)Resources.Load(path,typeof(TextAsset));
+            Debug.Log(path);
             StringReader sr = new StringReader(ta.text);
 
             sr.ReadLine();//Read descriptor line
@@ -125,7 +125,7 @@ public class CustomItemManager {
                 currentItem.prefabName = currentLine.Replace("Prefab =", "");
 
                 currentLine = sr.ReadLine();//Read generation chance
-                currentItem.generationChance = float.Parse(currentLine.Replace("Chance =", ""));
+                currentItem.generationChance = float.Parse(currentLine.Replace("Chance =", ""), System.Globalization.CultureInfo.InvariantCulture);
 
                 currentLine = sr.ReadLine();//Read uniqueness line
                 currentLine = currentLine.Replace("Unique =", "");

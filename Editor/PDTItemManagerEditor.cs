@@ -9,14 +9,16 @@ public class PDTItemManagerEditor : EditorWindow {
 
     GUIStyle large, medium, center,largecenter;
 
+    Vector2 scrollpos;
+
     // Add menu named "My Window" to the Window menu
     [MenuItem("Window/PDT Item Spawner Settings")]
     static void Init()
     {
         // Get existing open window or if none, make a new one:
         PDTItemManagerEditor window = (PDTItemManagerEditor)EditorWindow.GetWindow(typeof(PDTItemManagerEditor));
-        window.minSize = new Vector2(530,200);
-        window.maxSize = new Vector2(530, 1000);
+        window.minSize = new Vector2(550,200);
+        window.maxSize = new Vector2(550, 1000);
         window.Show();
     }
 
@@ -37,7 +39,7 @@ public class PDTItemManagerEditor : EditorWindow {
         {
             try
             {
-                CustomItemManager.items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(CustomItemManager.getItemListPath()));
+                CustomItemManager.items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(CustomItemManager.getResourcesFolderPrefix() + CustomItemManager.getDefaultListPath() + ".txt"));
             }
             catch
             {
@@ -46,7 +48,7 @@ public class PDTItemManagerEditor : EditorWindow {
                 newi.generationChance = 0.5f;
                 newi.type = "New Item";
 
-                CustomItemManager.saveItemList(CustomItemManager.getItemListPath(), temp);
+                CustomItemManager.saveItemList(CustomItemManager.getDefaultListPath(), temp);
                 CustomItemManager.items = temp;
             }
 
@@ -58,7 +60,7 @@ public class PDTItemManagerEditor : EditorWindow {
         EditorGUILayout.Space();
         EditorGUILayout.Space();
 
-        EditorGUILayout.LabelField("PDT Random Item Spawner 1.0",largecenter);
+        EditorGUILayout.LabelField("PDT Random Item Spawner 1.2",largecenter);
 
         EditorGUILayout.Space();
         EditorGUILayout.Space();
@@ -101,7 +103,7 @@ public class PDTItemManagerEditor : EditorWindow {
                 try
                 {
 
-                    CustomItemManager.items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(CustomItemManager.getItemListPath()));
+                    CustomItemManager.items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(CustomItemManager.getDefaultListPath()));
 
                     CustomItem[] temp = new CustomItem[CustomItemManager.items.Length + 1];
                     CustomItem newi = new CustomItem();
@@ -129,7 +131,7 @@ public class PDTItemManagerEditor : EditorWindow {
                     newi.generationChance = 0.5f;
                     newi.type = "New Item";
 
-                    CustomItemManager.saveItemList(CustomItemManager.getItemListPath(), temp);
+                    CustomItemManager.saveItemList(CustomItemManager.getDefaultListPath(), temp);
                     CustomItemManager.items = temp;
 
                 }
@@ -158,6 +160,8 @@ public class PDTItemManagerEditor : EditorWindow {
         EditorGUILayout.EndHorizontal();
 
         EditorGUILayout.Space();
+
+        scrollpos = EditorGUILayout.BeginScrollView(scrollpos);
 
         if (CustomItemManager.items != null)
         {
@@ -198,7 +202,7 @@ public class PDTItemManagerEditor : EditorWindow {
         {
             try
             {
-                CustomItemManager.items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(CustomItemManager.getItemListPath()));
+                CustomItemManager.items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(CustomItemManager.getDefaultListPath()));
             }
             catch
             {
@@ -208,11 +212,21 @@ public class PDTItemManagerEditor : EditorWindow {
 
         }
 
+        EditorGUILayout.EndScrollView();
+
         EditorGUILayout.Space();
 
-        if (GUILayout.Button("Save / Apply Custom Item List"))
+
+        if (GUILayout.Button("Save Item List File..."))
         {
-            CustomItemManager.saveItemList(CustomItemManager.getItemListPath(), CustomItemManager.items);
+            string path = EditorUtility.SaveFilePanel("Save Item List File...", CustomItemManager.getResourcesFolderPrefix(), "ItemList", "txt");
+            CustomItemManager.saveItemList(path, CustomItemManager.items);
+        }
+
+        if(GUILayout.Button("Load Item List File..."))
+        {
+            string path = EditorUtility.OpenFilePanel("Open Item List File...", CustomItemManager.getResourcesFolderPrefix(), "");
+            CustomItemManager.items = CustomItemManager.initializeListPrefab(CustomItemManager.loadItemList(path));
         }
 
     }

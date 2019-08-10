@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CustomItemRespawn : MonoBehaviour {
 
-    [Header("Delay In Seconds")]
+    [Header("Delay in Seconds")]
     public float delay = 0;
     private float counter = 0;
 
@@ -17,33 +17,35 @@ public class CustomItemRespawn : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
-        if((counter += Time.deltaTime) >= delay)
+
+        try
         {
-            counter = 0;
+            spawner = GetComponent<CustomItemSpawner>();
+        }
+        catch { }
+		
+        if(transform.childCount == 0)
+        {
 
-            try
+            if ((counter += Time.deltaTime) >= delay)
             {
+                counter = 0;
 
-                spawner = GetComponent<CustomItemSpawner>();
-
-                if(transform.childCount == 0)
+                try
                 {
-                    GetComponent<CustomItemSpawner>().spawned = false;
-                    GetComponent<CustomItemSpawner>().triggered = false;
 
-                    //Debug.Log("RESPAWNED!");
+                    
+                   GetComponent<CustomItemSpawner>().spawned = false;
+                   GetComponent<CustomItemSpawner>().triggered = false;
+                    
+
                 }
-                else
+                catch
                 {
-                    //Debug.Log("ITEM STILL ON SPAWNER");
-                }
 
+                }
             }
-            catch
-            {
-                
-            }
+
         }
 
 
