@@ -160,6 +160,20 @@ public class CustomItemSpawner : MonoBehaviour {
 
                 spawned = true;
 
+                //Try to reload missing prefabs on scene change / reload
+                if (generated.prefab == null)
+                {
+                    try
+                    {
+                        generated.prefab = GameObject.Find(generated.prefabName);
+                    }
+                    catch
+                    {
+                        Debug.Log("Could not reload item prefab!");
+                    }
+
+                }
+
                 obj = GameObject.Instantiate(generated.prefab);
                 obj.transform.localScale = generated.prefab.transform.lossyScale;
                 obj.transform.position = gameObject.transform.position;
