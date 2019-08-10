@@ -11,11 +11,9 @@ using nothing but default unity materials and prefabs.
 ## QUICK START
 
 1. Import the asset into your scene
-2. Drag and drop the folder "Assets/PDT Item Spawner/Resources" to the root "Assets" folder of your project.
-2A If the folder already exists, simply merge the contents.
-3. Load the Demo Scene located in the "Assets/PDT Item Spawner/Demo Scene" folder.
-4. Hit Play! You should see a random distribution of blue cubes and red spheres.
-5. You can now open the GUI located in "Window/PDT Item Spawner Settings" and play with the settings.
+2. Load the Demo Scene located in the "Assets/PDT Item Spawner/Demo Scene" folder.
+3. Hit Play! You should see a random distribution of blue cubes and red spheres.
+4. You can now open the GUI located in "Window/PDT Item Spawner Settings" and play with the settings.
 
 ## USAGE FROM SCRATCH
 
